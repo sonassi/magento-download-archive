@@ -13,7 +13,7 @@ class Downloader
 
     public function __construct()
     {
-        $this->config = parse_ini_file('settings.conf');
+        $this->config = @parse_ini_file('settings.conf');
 
         foreach (['ID', 'TOKEN'] as $requiredField) {
             if (!isset($this->config[$requiredField]))
@@ -25,11 +25,11 @@ class Downloader
         // Fetch list of possible downloads
         $downloadUrl = sprintf('%s/info/json/', $url);
 
-        if (!file_exists($this->cacheFile) && (time()-filemtime($this->cacheFile) > 3600)) {
+        if (file_exists($this->cacheFile) && (time()-filemtime($this->cacheFile) < 3600)) {
+            $downloadsJson = file_get_contents($this->cacheFile);
+        } else {
             $downloadsJson = file_get_contents($downloadUrl);
             file_put_contents($this->cacheFile, $downloadsJson);
-        } else {
-            $downloadsJson = file_get_contents($this->cacheFile);
         }
 
         $this->downloadData = json_decode($downloadsJson, true);
