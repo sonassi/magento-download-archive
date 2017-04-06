@@ -129,12 +129,16 @@ class Downloader
         // Show all full releases
         system('clear');
         printf("Download full releases\n--\n\n");
+        $all = false;
         $id = 0;
         $downloadMap = [];
         foreach ($this->downloadData['ce-full'] as $version => $releases) {
             $downloadMap[$id] = $version;
             printf(" [%d]: %s\n", $id++, $version);
         }
+
+        $downloadMap['all'] = 'all';
+        printf(" [all]: All downloads\n");
 
         $downloadVersion = -1;
         while (!array_key_exists($downloadVersion, $downloadMap)) {
@@ -144,30 +148,60 @@ class Downloader
 
         // Show all versions for selected release
         system('clear');
-        printf("Download %s\n--\n\n", $downloadRelease);
-        $id = 0;
-        $downloadMap = [];
-        foreach ($this->downloadData['ce-full'][$downloadRelease] as $release) {
-            $downloadMap[$id] = $release['file_name'];
-            printf("  [%d]: %s\n", $id++, $release['name']);
+        $downloadReleases = [ $downloadRelease ];
+        if ($downloadRelease == 'all') {
+            array_pop($downloadMap);
+            $downloadReleases = $downloadMap;
+            $all = true;
         }
 
-        $downloadVersion = -1;
-        while (!array_key_exists($downloadVersion, $downloadMap)) {
-            $downloadVersion = readline("\nSelect a valid option: ");
-        }
-        $downloadFilename = $downloadMap[$downloadVersion];
+        foreach ($downloadReleases as $downloadRelease) {
+            printf("Download %s\n--\n\n", $downloadRelease);
+            $id = 0;
+            $downloadMap = [];
+            foreach ($this->downloadData['ce-full'][$downloadRelease] as $release) {
+                $downloadMap[$id] = $release['file_name'];
+                $row = sprintf(" [%d]: %s\n", $id++, $release['name']);
+                if (!$all)
+                    echo $row;
+            }
 
-        system('clear');
-        printf("Downloading %s\n--\n\n", $downloadFilename);
-        $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
-        if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
-            printf("File downloaded to %s\r\n", $destinationFile);
-            exit(0);
-        } else {
-            printf("Failed\r\n");
-            exit(1);
+            $downloadMap['all'] = 'all';
+            if (!$all)
+                printf(" [all]: All downloads\n");
+
+            if (!$all) {
+
+                $downloadVersion = -1;
+                while (!array_key_exists($downloadVersion, $downloadMap)) {
+                    $downloadVersion = readline("\nSelect a valid option: ");
+                }
+                $downloadFilename = $downloadMap[$downloadVersion];
+            } else {
+                $downloadFilename = 'all';
+            }
+
+            system('clear');
+            $downloadFilenames = [ $downloadFilename ];
+            if ($downloadFilename == 'all') {
+                array_pop($downloadMap);
+                $downloadFilenames = $downloadMap;
+            }
+
+            foreach ($downloadFilenames as $downloadFilename) {
+                printf("Downloading %s\n--\n\n", $downloadFilename);
+                $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
+                if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
+                    printf("File downloaded to %s\r\n", $destinationFile);
+                    $errorCode = 0;
+                } else {
+                    printf("Failed\r\n");
+                    $errorCode = 1;
+                }
+            }
         }
+
+        exit($errorCode);
     }
 
    public function downloadOther()
@@ -229,7 +263,7 @@ class Downloader
         $downloadMap = [];
         foreach ($this->downloadData['ce-patch'][$downloadRelease] as $release) {
             $downloadMap[$id] = $release['file_name'];
-            printf("  [%d]: %s\n", $id++, $release['name']);
+            printf(" [%d]: %s\n", $id++, $release['name']);
         }
 
         $downloadMap['all'] = 'all';
