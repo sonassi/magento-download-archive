@@ -5,7 +5,9 @@ class Downloader
 
     private $downloadData;
     private $downloadUrlFormat = 'https://%s:%s@www.magentocommerce.com/products/downloads';
-    private $githubUrlFormat = 'https://raw.githubusercontent.com/sonassi/magento-downloads/master';
+    private $githubUrlFormat = 'https://raw.githubusercontent.com';
+    private $githubDownloadsRepo = 'sonassi/magento-downloads/master';
+    private $githubSelfRepo = 'sonassi/magento-download-archive/master';
     private $cacheFile = '.downloads.cache';
     private $config;
     private $downloadId = 0;
@@ -13,7 +15,8 @@ class Downloader
 
     public function __construct()
     {
-        $this->config = @parse_ini_file('settings.conf');
+        $this->cwd = getcwd();
+        $this->config = @parse_ini_file('config.ini');
 
         foreach (['ID', 'TOKEN'] as $requiredField) {
             if (!isset($this->config[$requiredField]))
@@ -50,7 +53,7 @@ class Downloader
             $destinationFile = sprintf('%s/%s', $this->downloadDir, $filename);
 
         // Try downloading from the Sonassi github repo for better performance
-        $githubUrl = sprintf('%s/%s', $this->githubUrlFormat, $filename);
+        $githubUrl = sprintf('%s/%s/%s', $this->githubUrlFormat, $this->githubDownloadsRepo, $filename);
         if ($this->remoteFileExists($githubUrl))
             $sourceFile = $githubUrl;
 
@@ -243,8 +246,20 @@ class Downloader
         // Show all full releases
         system('clear');
         printf("Download Magento patches\n--\n\n");
+
         $id = 0;
         $downloadMap = [];
+
+        // Attempt to auto detect Magento version
+        $mageFilename = sprintf("%s/app/Mage.php", $this->cwd);
+        if (file_exists($mageFilename)) {
+            require_once getcwd().'/app/Mage.php';
+            $versionArray = Mage::getVersionInfo();
+            $versionString = sprintf("%s.%s.%s.%s", $versionArray['major'], $versionArray['minor'], $versionArray['revision'], $versionArray['patch']);
+            $downloadMap[$id] = $versionString;
+            printf(" [%d]: %s (auto detected)\n", $id++, $versionString);
+        }
+
         foreach ($this->downloadData['ce-patch'] as $version => $releases) {
             $downloadMap[$id] = $version;
             printf(" [%d]: %s\n", $id++, $version);
@@ -267,7 +282,7 @@ class Downloader
         }
 
         $downloadMap['all'] = 'all';
-        printf("  [all]: All patches\n");
+        printf(" [all]: All patches\n");
 
         $downloadVersion = -1;
         while (!array_key_exists($downloadVersion, $downloadMap)) {
