@@ -1,4 +1,4 @@
-#Magento Download Archive
+# Magento Download Archive
 
 Quickly download Magento patches for any Magento version or full Magento source, using a backup download source for high performance downloads.
 

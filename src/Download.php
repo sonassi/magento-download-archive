@@ -291,7 +291,8 @@ class Downloader
         $downloadFilename = $downloadMap[$downloadVersion];
 
         system('clear');
-        $downloadFilenames = [ $downloadFilenames ];
+        $downloadFilenames = [ $downloadFilename ];
+
         if ($downloadFilename == 'all') {
             array_pop($downloadMap);
             $downloadFilenames = $downloadMap;
