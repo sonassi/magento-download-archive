@@ -271,6 +271,18 @@ class Downloader
         }
         $downloadRelease = $downloadMap[$downloadVersion];
 
+        $appliedFilename = sprintf("%s/app/etc/applied.patches.list", $this->cwd);
+        $appliedPatches = array();
+        if (file_exists($appliedFilename)) {
+            $content = file_get_contents($appliedFilename);
+            preg_match_all('/^[a-zA-Z0-9:\s\-]+ \| ([^\|]+) \|/m', $content, $matches);
+
+            if (isset($matches[1]))
+                $appliedPatches = array_unique($matches[1]);
+        }
+
+        $colors = new Colors();
+
         // Show all patches for selected release
         system('clear');
         printf("Patches for Magento %s\n--\n\n", $downloadRelease);
@@ -278,7 +290,12 @@ class Downloader
         $downloadMap = [];
         foreach ($this->downloadData['ce-patch'][$downloadRelease] as $release) {
             $downloadMap[$id] = $release['file_name'];
-            printf(" [%d]: %s\n", $id++, $release['name']);
+
+            $nameArray = explode(' ', $release['name']);
+            $shortName = array_shift($nameArray);
+
+            $status = !in_array($shortName, $appliedPatches) ? $colors->getColoredString('Missing', 'red') : $colors->getColoredString('Installed', 'green');
+            printf(" [%d]: %s - %s\n", $id++, $release['name'], $status);
         }
 
         $downloadMap['all'] = 'all';
