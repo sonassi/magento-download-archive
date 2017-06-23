@@ -294,7 +294,7 @@ class Downloader
             $nameArray = explode(' ', $release['name']);
             $shortName = array_shift($nameArray);
 
-            $status = !in_array($shortName, $appliedPatches) ? $colors->getColoredString('Missing', 'red') : $colors->getColoredString('Installed', 'green');
+            $status = !in_array($shortName, $appliedPatches) && !in_array($release['file_name'], $appliedPatches) ? $colors->getColoredString('Missing', 'red') : $colors->getColoredString('Installed', 'green');
             printf(" [%d]: %s - %s\n", $id++, $release['name'], $status);
         }
 
