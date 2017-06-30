@@ -20,7 +20,9 @@ $longopts  = array(
 $options = getopt($shortopts, $longopts);
 
 if (isset($options['run-test'])) {
+    unset($argv[0], $argv[1]);
+    $args = implode(' ', $argv);
     copy($buildRoot . "/mda.phar", $testRoot . "/mda.phar");
     chdir($testRoot);
-    passthru('php mda.phar');
+    passthru('php mda.phar ' . $args);
 }
