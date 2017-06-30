@@ -8,40 +8,72 @@ class Downloader
     private $githubUrlFormat = 'https://raw.githubusercontent.com';
     private $githubDownloadsRepo = 'sonassi/magento-downloads/master';
     private $githubSelfRepo = 'sonassi/magento-download-archive/master';
-    private $cacheFile = '.downloads.cache';
+    private $cacheFile;
     private $config;
     private $downloadId = 0;
     private $downloadDir = './downloads';
     private $log = [];
+    private $longopts = [ 'id::', 'token::', 'help' ];
 
     public function __construct()
     {
+        $options = getopt('', $this->longopts);
+
+        if (isset($options['help']))
+            $this->usage();
+
         $this->cwd = getcwd();
-        $this->config = @parse_ini_file('config.ini');
         $this->colors = new Colors();
-        $this->cacheFile = $this->cwd . '/' . $this->cacheFile;
+        $this->localConfigFile = $this->cwd . '/.config.ini';
+
+        if (!file_exists($this->localConfigFile))
+            copy('phar://mda.phar/config.ini', $this->localConfigFile);
+
+        $this->config = @parse_ini_file('.config.ini');
+
+        foreach (['id', 'token'] as $value) {
+            if (!empty($options[$value]))
+                $this->config[strtoupper($value)] = $options[$value];
+        }
 
         foreach (['ID', 'TOKEN'] as $requiredField) {
             if (!isset($this->config[$requiredField]))
                 throw new Exception(sprintf('Magento %s is not set', $requiredField));
         }
 
+        $this->cacheFile = $this->cwd . '/.mda.' . sha1(serialize($this->config));
+
         $url = sprintf($this->downloadUrlFormat, $this->config['ID'], $this->config['TOKEN']);
+        $url = sprintf('%s/info/json', $url);
 
         // Fetch list of possible downloads
         $downloadUrl = sprintf('%s/info/json/', $url);
 
         if (file_exists($this->cacheFile) && (time()-filemtime($this->cacheFile) < 3600)) {
             $downloadsJson = file_get_contents($this->cacheFile);
-        } else {
-            $downloadsJson = file_get_contents($downloadUrl);
+        } else if ($downloadsJson = @file_get_contents($downloadUrl)) {
             file_put_contents($this->cacheFile, $downloadsJson);
+        } else {
+            printf("Error: Could not fetch URL (%s)\n", $url);
+            exit(1);
         }
 
         $this->downloadData = json_decode($downloadsJson, true);
 
         if (!is_dir($this->downloadDir))
             @mkdir($this->downloadDir);
+    }
+
+    public function usage()
+    {
+        echo <<<EOF
+Options:
+
+    --id        Magento download ID
+    --token     Magento download token
+
+EOF;
+        exit(1);
     }
 
     public function download($filename, $destinationFile = false)
@@ -128,9 +160,19 @@ class Downloader
         return $contentLength;
     }
 
+    public function downloadEefull()
+    {
+        return $this->downloadFull('ee-full');
+    }
+
     public function downloadCefull()
     {
-        uksort($this->downloadData['ce-full'], 'version_compare');
+        return $this->downloadFull('ce-full');
+    }
+
+    public function downloadFull($magentoVersion = 'ce-full')
+    {
+        uksort($this->downloadData[], 'version_compare');
 
         // Show all full releases
         system('clear');
@@ -139,7 +181,7 @@ class Downloader
         $all = false;
         $id = 0;
         $downloadMap = [];
-        foreach ($this->downloadData['ce-full'] as $version => $releases) {
+        foreach ($this->downloadData[$magentoVersion] as $version => $releases) {
             $downloadMap[$id] = $version;
             $option = sprintf(" [%d]:", $id++);
             printf("%s %s\n", str_pad($option, 8), $version);
@@ -175,7 +217,7 @@ class Downloader
             printf("Download %s\n--\n\n", $downloadRelease);
             $id = 0;
             $downloadMap = [];
-            foreach ($this->downloadData['ce-full'][$downloadRelease] as $release) {
+            foreach ($this->downloadData[$magentoVersion][$downloadRelease] as $release) {
                 $downloadMap[$id] = $release['file_name'];
                 $option = sprintf(" [%d]:", $id++);
                 $row = sprintf("%s %s\n", str_pad($option, 8), $release['name']);
@@ -191,7 +233,6 @@ class Downloader
             printf("\n [q]:    Quit\n");
 
             if (!$all) {
-
                 $downloadVersion = -1;
                 while (!array_key_exists($downloadVersion, $downloadMap)) {
                     $downloadVersion = readline("\nSelect a valid option: ");
@@ -202,6 +243,7 @@ class Downloader
             }
 
             system('clear');
+            $this->printLog();
             $downloadFilenames = [ $downloadFilename ];
             switch ($downloadFilename) {
                 case 'a':
@@ -225,7 +267,7 @@ class Downloader
             }
         }
 
-        $this->downloadCefull();
+        $this->downloadFull($magentoVersion);
     }
 
    public function downloadOther()
@@ -244,7 +286,9 @@ class Downloader
             printf("%s %s\n", str_pad($option, 8), $releases['name']);
         }
 
+        $downloadMap['a'] = 'a';
         $downloadMap['q'] = 'q';
+        printf("\n [a]:    All downloads\n");
         printf("\n [q]:    Quit\n");
 
         $downloadVersion = -1;
@@ -253,27 +297,46 @@ class Downloader
         }
         $downloadFilename = $downloadMap[$downloadVersion];
 
+        system('clear');
+        $this->printLog();
+        $downloadFilenames = [ $downloadFilename ];
         switch ($downloadFilename) {
+            case 'a':
+                $remove = preg_grep('/[^0-9]+/', array_keys($downloadMap));
+                $downloadFilenames = array_diff_key($downloadMap, array_flip($remove));
+                $all = true;
+                break;
             case 'q':
                 exit;
                 break;
         }
 
-        system('clear');
-        printf("Downloading %s\n--\n\n", $downloadFilename);
-        $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
-        if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
-            $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
-        } else {
-            $this->log[] = sprintf("Download Failed\r\n");
+        foreach ($downloadFilenames as $downloadFilename) {
+            printf("Downloading %s\n--\n\n", $downloadFilename);
+            $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
+            if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
+                $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
+            } else {
+                $this->log[] = sprintf("Download Failed\r\n");
+            }
         }
 
         $this->downloadOther();
     }
 
-    public function downloadCepatch($downloadRelease = false)
+    public function downloadEePatch()
     {
-        uksort($this->downloadData['ce-patch'], 'version_compare');
+        return $this->downloadPatch(false, 'ee-patch');
+    }
+
+    public function downloadCePatch()
+    {
+        return $this->downloadPatch(false, 'ce-patch');
+    }
+
+    public function downloadPatch($downloadRelease = false, $magentoVersion = 'ce-patch', $autoDetectedVersion = false)
+    {
+        uksort($this->downloadData[$magentoVersion], 'version_compare');
 
         // Show all full releases
         system('clear');
@@ -290,13 +353,19 @@ class Downloader
                 $versionArray = Mage::getVersionInfo();
                 $versionString = sprintf("%s.%s.%s.%s", $versionArray['major'], $versionArray['minor'], $versionArray['revision'], $versionArray['patch']);
                 $downloadMap[$id] = $versionString;
+                $autoDetectedVersion = $versionString;
                 printf(" [%d]: %s %s\n", $id++, $versionString, $this->colors->getColoredString('(auto detected)', 'green'));
             }
 
-            foreach ($this->downloadData['ce-patch'] as $version => $releases) {
+            foreach ($this->downloadData[$magentoVersion] as $version => $releases) {
                 $downloadMap[$id] = $version;
                 printf(" [%d]: %s\n", $id++, $version);
             }
+
+            $downloadMap['a'] = 'a';
+            $downloadMap['q'] = 'q';
+            printf("\n [a]:    All downloads\n");
+            printf("\n [q]:    Quit\n");
 
             $downloadVersion = -1;
             while (!array_key_exists($downloadVersion, $downloadMap)) {
@@ -318,67 +387,97 @@ class Downloader
         // Show all patches for selected release
         system('clear');
         $this->printLog();
-        printf("Patches for Magento %s\n--\n\n", $downloadRelease);
-        $id = 0;
-        $downloadMap = [];
-        $missingPatches = [];
-        foreach ($this->downloadData['ce-patch'][$downloadRelease] as $release) {
-            $downloadMap[$id] = $release['file_name'];
-
-            $nameArray = explode(' ', $release['name']);
-            $shortName = array_shift($nameArray);
-
-            if (!in_array($shortName, $appliedPatches) && !in_array($release['file_name'], $appliedPatches)) {
-                $status = $this->colors->getColoredString(str_pad('Missing', 12), 'red');
-                $missingPatches[] = $release['file_name'];
-            } else {
-                $status = $this->colors->getColoredString(str_pad('Installed', 12), 'green');
-            }
-
-            $option = sprintf(" [%d]:", $id++);
-            printf("%s %s%s\n", str_pad($option, 8), $status, $release['name']);
-        }
-
-        $downloadMap['a'] = 'a';
-        $downloadMap['q'] = 'q';
-        $downloadMap['m'] = 'm';
-        printf("\n [a]:    All patches");
-        printf("\n [m]:    All missing patches\n");
-        printf("\n [q]:    Quit\n");
-
-        $downloadVersion = -1;
-        while (!array_key_exists($downloadVersion, $downloadMap)) {
-            $downloadVersion = readline("\nSelect a valid option: ");
-        }
-        $downloadFilename = $downloadMap[$downloadVersion];
-
-        system('clear');
-        $downloadFilenames = [ $downloadFilename ];
-
-        switch ($downloadFilename) {
+        $downloadReleases = [ $downloadRelease ];
+        switch ($downloadRelease) {
             case 'a':
                 $remove = preg_grep('/[^0-9]+/', array_keys($downloadMap));
-                $downloadFilenames = array_diff_key($downloadMap, array_flip($remove));
-                break;
-            case 'm':
-                $downloadFilenames = $missingPatches;
+                $downloadReleases = array_diff_key($downloadMap, array_flip($remove));
+                $all = true;
                 break;
             case 'q':
                 exit;
                 break;
         }
 
-        foreach ($downloadFilenames as $downloadFilename) {
-            printf("Downloading %s\n--\n\n", $downloadFilename);
-            $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
-            if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
-                $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
+        foreach ($downloadReleases as $downloadRelease) {
+            printf("Patches for Magento %s\n--\n\n", $downloadRelease);
+            $id = 0;
+            $downloadMap = [];
+            $missingPatches = [];
+            if (is_array($this->downloadData[$magentoVersion][$downloadRelease])) {
+                foreach ($this->downloadData[$magentoVersion][$downloadRelease] as $release) {
+                    $downloadMap[$id] = $release['file_name'];
+
+                    $nameArray = explode(' ', $release['name']);
+                    $shortName = array_shift($nameArray);
+
+                    if (!$all) {
+                        $status = false;
+                        if ($autoDetectedVersion == $downloadRelease) {
+                            if (!in_array($shortName, $appliedPatches) && !in_array($release['file_name'], $appliedPatches)) {
+                                $status = $this->colors->getColoredString(str_pad('Missing', 12), 'red');
+                                $missingPatches[] = $release['file_name'];
+                            } else {
+                                $status = $this->colors->getColoredString(str_pad('Installed', 12), 'green');
+                            }
+                        }
+
+                        $option = sprintf(" [%d]:", $id++);
+                        printf("%s %s%s\n", str_pad($option, 8), $status, $release['name']);
+                    }
+                }
+
+                if (!$all) {
+                    $downloadMap['a'] = 'a';
+                    printf("\n [a]:    All patches");
+                }
+
+                $downloadMap['m'] = 'm';
+                printf("\n [m]:    All missing patches\n");
+            }
+
+            $downloadMap['q'] = 'q';
+            printf("\n [q]:    Quit\n");
+
+            if (!$all) {
+                $downloadVersion = -1;
+                while (!array_key_exists($downloadVersion, $downloadMap)) {
+                    $downloadVersion = readline("\nSelect a valid option: ");
+                }
+                $downloadFilename = $downloadMap[$downloadVersion];
             } else {
-                $this->log[] = sprintf("Download Failed\r\n");
+                $downloadFilename = 'a';
+            }
+
+            system('clear');
+            $this->printLog();
+            $downloadFilenames = [ $downloadFilename ];
+
+            switch ($downloadFilename) {
+                case 'a':
+                    $remove = preg_grep('/[^0-9]+/', array_keys($downloadMap));
+                    $downloadFilenames = array_diff_key($downloadMap, array_flip($remove));
+                    break;
+                case 'm':
+                    $downloadFilenames = $missingPatches;
+                    break;
+                case 'q':
+                    exit;
+                    break;
+            }
+
+            foreach ($downloadFilenames as $downloadFilename) {
+                printf("Downloading %s\n--\n\n", $downloadFilename);
+                $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
+                if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
+                    $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
+                } else {
+                    $this->log[] = sprintf("Download Failed\r\n");
+                }
             }
         }
 
-        $this->downloadCepatch($downloadRelease);
+        $this->downloadPatch($downloadRelease, $magentoVersion, $autoDetectedVersion);
     }
 
     public function printLog()
