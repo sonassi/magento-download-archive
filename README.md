@@ -8,22 +8,36 @@ Change to to your Magento document root and grab the pre-built phar,
 
 ~~~
 cd /microcloud/domains/example/domains/example.com/http
-wget --no-check-certificate https://raw.githubusercontent.com/sonassi/magento-download-archive/master/bin/mda.phar
+wget -O mda.phar --no-check-certificate https://raw.githubusercontent.com/sonassi/magento-download-archive/master/bin/mda.phar
 ~~~~
 
 Then execute the phar and follow the on-screen options,
 
 ~~~~
-php mda.phar
-
 Downloadable types
+--
 
- [0]: ce-full
- [1]: ce-patch
- [2]: other
+ [0]:    Ce-full
+ [1]:    Ce-patch
+ [2]:    Ee-full
+ [3]:    Ee-patch
+ [4]:    Other
+
+ [q]:    Quit
 
 Select a valid option:
 ~~~~
+
+### Setting custom id/token for personalised downloads
+
+If you are a Magento EE subscriber, or simply want to use your own id/token for downloads, you can do so using the following options.
+
+The application supports the following long options,
+
+ - `--id`  
+    Your Magento ID, found in your [My Account](https://account.magento.com/customer/account/) section on the top left hand side.
+ - `--token`  
+    Your Magento Token, found in your [Access Token](https://account.magento.com/downloads/token/) section.
 
 ## Building phar
 
