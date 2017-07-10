@@ -51,7 +51,7 @@ class Downloader
 
         if (file_exists($this->cacheFile) && (time()-filemtime($this->cacheFile) < 3600)) {
             $downloadsJson = file_get_contents($this->cacheFile);
-        } else if ($downloadsJson = @file_get_contents($downloadUrl)) {
+        } else if ($downloadsJson = file_get_contents($downloadUrl)) {
             file_put_contents($this->cacheFile, $downloadsJson);
         } else {
             printf("Error: Could not fetch URL (%s)\n", $url);
@@ -172,7 +172,7 @@ EOF;
 
     public function downloadFull($magentoVersion = 'ce-full')
     {
-        uksort($this->downloadData[], 'version_compare');
+        uksort($this->downloadData[$magentoVersion], 'version_compare');
 
         // Show all full releases
         system('clear');
