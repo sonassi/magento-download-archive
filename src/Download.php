@@ -414,11 +414,13 @@ EOF;
                     if (!$all) {
                         $status = false;
                         if ($autoDetectedVersion == $downloadRelease) {
-                            if (!in_array($shortName, $appliedPatches) && !in_array($release['file_name'], $appliedPatches)) {
+                            if (in_array($shortName, $appliedPatches) ||
+                                in_array($release['file_name'], $appliedPatches) ||
+                                in_array(preg_replace('#\.sh$#', '', $release['file_name']), $appliedPatches)) {
+                                $status = $this->colors->getColoredString(str_pad('Installed', 12), 'green');
+                            } else {
                                 $status = $this->colors->getColoredString(str_pad('Missing', 12), 'red');
                                 $missingPatches[] = $release['file_name'];
-                            } else {
-                                $status = $this->colors->getColoredString(str_pad('Installed', 12), 'green');
                             }
                         }
 

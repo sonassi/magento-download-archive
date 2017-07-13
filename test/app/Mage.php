@@ -14,9 +14,9 @@ class Mage
     {
         return array(
             'major'     => '1',
-            'minor'     => '14',
-            'revision'  => '2',
-            'patch'     => '2',
+            'minor'     => '7',
+            'revision'  => '0',
+            'patch'     => '1',
             'stability' => '0',
             'number'    => '',
         );
