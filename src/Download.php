@@ -434,8 +434,6 @@ EOF;
                     }
                 }
 
-                var_dump($appliedPatches);exit;
-
                 if (!$all) {
                     $downloadMap['a'] = 'a';
                     printf("\n [a]:    All patches");
