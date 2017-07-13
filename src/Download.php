@@ -410,13 +410,18 @@ EOF;
 
                     $nameArray = explode(' ', $release['name']);
                     $shortName = array_shift($nameArray);
+                    $fileNameWithoutSuffix = preg_replace('#\.sh$#', '', $release['file_name']);
+                    $patchNameFromShortName = (preg_match('#(.+?)?(SUPEE\-[0-9v\.]+) .+#', $release['name'], $matches)) ? $matches[2] : null;
+                    $patchNameFromFileName = (preg_match('#(.+?)?(SUPEE\-[0-9v\.]+).+?#', $release['file_name'], $matches)) ? $matches[2] : null;
 
                     if (!$all) {
                         $status = false;
                         if ($autoDetectedVersion == $downloadRelease) {
                             if (in_array($shortName, $appliedPatches) ||
                                 in_array($release['file_name'], $appliedPatches) ||
-                                in_array(preg_replace('#\.sh$#', '', $release['file_name']), $appliedPatches)) {
+                                in_array($fileNameWithoutSuffix, $appliedPatches) ||
+                                in_array($patchNameFromShortName, $appliedPatches) ||
+                                in_array($patchNameFromFileName, $appliedPatches)) {
                                 $status = $this->colors->getColoredString(str_pad('Installed', 12), 'green');
                             } else {
                                 $status = $this->colors->getColoredString(str_pad('Missing', 12), 'red');
@@ -425,9 +430,11 @@ EOF;
                         }
 
                         $option = sprintf(" [%d]:", $id++);
-                        printf("%s %s%s\n", str_pad($option, 8), $status, $release['name']);
+                        printf("%s %s%s (%s/%s)\n", str_pad($option, 8), $status, $release['name'], $release['file_name'], $shortName);
                     }
                 }
+
+                var_dump($appliedPatches);exit;
 
                 if (!$all) {
                     $downloadMap['a'] = 'a';
