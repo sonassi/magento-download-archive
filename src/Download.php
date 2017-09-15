@@ -375,13 +375,20 @@ EOF;
         }
 
         $appliedFilename = sprintf("%s/app/etc/applied.patches.list", $this->cwd);
-        $appliedPatches = array();
+        $appliedPatches = [];
         if (file_exists($appliedFilename)) {
             $content = file_get_contents($appliedFilename);
-            preg_match_all('/^[a-zA-Z0-9:\s\-]+ \| ([^\|]+) \|/m', $content, $matches);
+            if (preg_match_all('/^[a-zA-Z0-9:\s\-]+ \| ([^\|]+) \| ([^\|]+) \| ([^\|]+) \|/m', $content, $matches)) {
+                foreach ($matches[0] as $key => $value) {
+                    $patchName = preg_replace(['/^[A-Z_-]+[_-]SUPEE/', '/(SUPEE-[0-9.]+)[_-].+/'], ['SUPEE', '\\1'], trim($matches[1][$key]));
+                    $magentoRelease = trim($matches[2][$key]);
+                    $patchVersion = trim($matches[3][$key]);
 
-            if (isset($matches[1]))
-                $appliedPatches = array_unique($matches[1]);
+                    //$appliedPatches[] = $patchName;
+                    $appliedPatches[] = sprintf('%s-%s', $patchName, $patchVersion);
+                    //$appliedPatches[] = $matches[1][$key];
+                }
+            }
         }
 
         // Show all patches for selected release
@@ -405,23 +412,27 @@ EOF;
             $downloadMap = [];
             $missingPatches = [];
             if (is_array($this->downloadData[$magentoVersion][$downloadRelease])) {
+
                 foreach ($this->downloadData[$magentoVersion][$downloadRelease] as $release) {
                     $downloadMap[$id] = $release['file_name'];
 
                     $nameArray = explode(' ', $release['name']);
                     $shortName = array_shift($nameArray);
-                    $fileNameWithoutSuffix = preg_replace('#\.sh$#', '', $release['file_name']);
-                    $patchNameFromShortName = (preg_match('#(.+?)?(SUPEE\-[0-9v\.]+) .+#', $release['name'], $matches)) ? $matches[2] : null;
-                    $patchNameFromFileName = (preg_match('#(.+?)?(SUPEE\-[0-9v\.]+).+?#', $release['file_name'], $matches)) ? $matches[2] : null;
+
+                    $patchVersion = (preg_match('/(v[0-9.]+)/', $release['file_name'], $matches)) ? rtrim($matches[1], '.') : 'v1';
+                    $patchName = (preg_match('/(SUPEE-[0-9]+)/', $release['file_name'], $matches))
+                                    ? $matches[1]
+                                    : (preg_match('/(SUPEE-[0-9]+)/', $release['name'], $matches))
+                                        ? $matches[1]
+                                        : '';
+                    $patchCombinedName = sprintf('%s-%s', $patchName, $patchVersion);
 
                     if (!$all) {
                         $status = false;
                         if ($autoDetectedVersion == $downloadRelease) {
-                            if (in_array($shortName, $appliedPatches) ||
-                                in_array($release['file_name'], $appliedPatches) ||
-                                in_array($fileNameWithoutSuffix, $appliedPatches) ||
-                                in_array($patchNameFromShortName, $appliedPatches) ||
-                                in_array($patchNameFromFileName, $appliedPatches)) {
+                            if (in_array($release['file_name'], $appliedPatches) ||
+                                in_array($patchName, $appliedPatches) ||
+                                in_array($patchCombinedName, $appliedPatches)) {
                                 $status = $this->colors->getColoredString(str_pad('Installed', 12), 'green');
                             } else {
                                 $status = $this->colors->getColoredString(str_pad('Missing', 12), 'red');
