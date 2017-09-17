@@ -1,8 +1,0 @@
-settings.conf
-downloads
-.downloads.cache
-download.sh
-test/mda.phar
-test/downloads/
-test/.mda.*
-test/.config.ini

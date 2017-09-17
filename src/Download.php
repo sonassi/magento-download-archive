@@ -11,7 +11,7 @@ class Downloader
     private $cacheFile;
     private $config;
     private $downloadId = 0;
-    private $downloadDir = './downloads';
+    private $downloadDir = 'downloads';
     private $log = [];
     private $longopts = [ 'id::', 'token::', 'help' ];
 
@@ -85,7 +85,7 @@ EOF;
         $sourceFile = sprintf('%s/file/%s', $url, $filename);
 
         if (!$destinationFile)
-            $destinationFile = sprintf('%s/%s', $this->downloadDir, $filename);
+            $destinationFile = sprintf('%s/%s/%s', $this->cwd, $this->downloadDir, $filename);
 
         // Try downloading from the Sonassi github repo for better performance
         $githubUrl = sprintf('%s/%s/%s', $this->githubUrlFormat, $this->githubDownloadsRepo, $filename);
@@ -258,7 +258,7 @@ EOF;
 
             foreach ($downloadFilenames as $downloadFilename) {
                 printf("\nDownloading %s\n--\n\n", $downloadFilename);
-                $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
+                $downloadFile = sprintf('%s/%s/%s', $this->cwd, $this->downloadDir, $downloadFilename);
                 if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
                     $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
                 } else {
@@ -313,7 +313,7 @@ EOF;
 
         foreach ($downloadFilenames as $downloadFilename) {
             printf("Downloading %s\n--\n\n", $downloadFilename);
-            $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
+            $downloadFile = sprintf('%s/%s/%s', $this->cwd, $this->downloadDir, $downloadFilename);
             if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
                 $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
             } else {
@@ -486,7 +486,7 @@ EOF;
 
             foreach ($downloadFilenames as $downloadFilename) {
                 printf("Downloading %s\n--\n\n", $downloadFilename);
-                $downloadFile = sprintf('%s/%s', $this->downloadDir, $downloadFilename);
+                $downloadFile = sprintf('%s/%s/%s', $this->cwd, $this->downloadDir, $downloadFilename);
                 if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
                     $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
                 } else {
