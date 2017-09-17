@@ -259,7 +259,9 @@ EOF;
             foreach ($downloadFilenames as $downloadFilename) {
                 printf("\nDownloading %s\n--\n\n", $downloadFilename);
                 $downloadFile = sprintf('%s/%s/%s', $this->cwd, $this->downloadDir, $downloadFilename);
-                if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
+                if ($all && preg_match('/(Samples|sample_data)/', $downloadFile)) {
+                    $this->log[] = sprintf("Downloads including sample data skipped when downloading all\r\n");
+                } else if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
                     $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
                 } else {
                     $this->log[] = sprintf("Download Failed\r\n");
