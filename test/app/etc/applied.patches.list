@@ -823,7 +823,13 @@ patching file app/code/core/Mage/Usa/Model/Shipping/Carrier/Usps.php
 Hunk #2 succeeded at 481 with fuzz 1 (offset 1 line).
 
 
-2017-09-15 15:00:09 UTC | SUPEE-10266-CE-1.8.1.0 | CE_1.8.0.0 | v1 | 2b79beba94fa9945170ac0fd64b9f9da637b1bc7 | Fri Sep 1 12:14:38 2017 +0300 | 7d939db39dfa1daeb849e6fa7dc81d364b73560b..HEAD
+2017-09-15 09:58:56 UTC | SUPEE-10336_v1.13.0.2 | CE_1.8.0.0 | v1 | 024f26246cb44532b7667947dd349c362068cdc5 | Fri Sep 8 19:13:53 2017 +0300 | 2fd3d42..024f26246cb4
+patching file app/code/core/Mage/Usa/Model/Shipping/Carrier/Usps.php
+Hunk #1 succeeded at 542 (offset 6 lines).
+Hunk #2 succeeded at 695 (offset 6 lines).
+
+
+2017-09-15 09:59:55 UTC | SUPEE-10266-CE-1.7.0.2 | CE_1.7.0.2 | v1 | 702841e79e94726908f9e3320210d30f46377801 | Fri Sep 1 12:14:18 2017 +0300 | 0bc66304ea11b5549b356cf49b41fa4eb60c4342..HEAD
 patching file app/code/core/Mage/Admin/Model/Session.php
 patching file app/code/core/Mage/Adminhtml/Block/Notification/Grid/Renderer/Notice.php
 patching file app/code/core/Mage/Adminhtml/Block/Widget/Form/Container.php
@@ -833,7 +839,6 @@ patching file app/code/core/Mage/Adminhtml/controllers/CustomerController.php
 patching file app/code/core/Mage/Adminhtml/controllers/Newsletter/QueueController.php
 patching file app/code/core/Mage/Adminhtml/controllers/Newsletter/TemplateController.php
 patching file app/code/core/Mage/Checkout/controllers/CartController.php
-Hunk #2 succeeded at 583 (offset -1 lines).
 patching file app/code/core/Mage/Core/Model/File/Validator/Image.php
 patching file app/code/core/Mage/Core/etc/config.xml
 patching file app/code/core/Mage/Rss/Helper/Data.php
@@ -852,5 +857,252 @@ patching file app/design/adminhtml/default/default/template/sales/order/view/inf
 patching file app/design/install/default/default/template/install/create_admin.phtml
 patching file app/locale/en_US/Mage_Adminhtml.csv
 patching file downloader/template/login.phtml
-Hunk #1 succeeded at 34 (offset -1 lines).
+
+
+2017-11-29 11:37:36 UTC | SUPEE-9652 | EE_1.14.3.1 | v1 | 4038f0785d828794083f53f10c01aaa6af403523 | Tue Jan 24 15:03:12 2017 +0200 | 9586981e6ca8b255014b242d50b68b88525b0754..4038f0785d828794083f53f10c01aaa6af403523 | REVERTED
+patching file lib/Zend/Mail/Transport/Sendmail.php
+
+
+2017-11-29 11:37:37 UTC | SUPEE-9652 | EE_1.14.3.1 | v1 | 4038f0785d828794083f53f10c01aaa6af403523 | Tue Jan 24 15:03:12 2017 +0200 | 9586981e6ca8b255014b242d50b68b88525b0754..4038f0785d828794083f53f10c01aaa6af403523
+patching file lib/Zend/Mail/Transport/Sendmail.php
+
+
+2017-11-29 11:37:47 UTC | SUPEE-10415-ce-1.7.0.2 | CE_1.7.0.2 | v1 | 7b1e3bf3a08236903dc9fa975080403aa9ed9642 | Thu Nov 9 13:41:54 2017 +0200 | c95c86af63e2e573ef01c27fdd78f8787d9ed955..HEAD
+patching file app/Mage.php
+patching file app/code/core/Mage/Adminhtml/Block/Report/Review/Detail.php
+patching file app/code/core/Mage/Adminhtml/Block/Report/Tag/Product/Detail.php
+patching file app/code/core/Mage/Adminhtml/Block/Review/Add.php
+patching file app/code/core/Mage/Adminhtml/Block/Review/Edit/Form.php
+patching file app/code/core/Mage/Adminhtml/Controller/Action.php
+patching file app/code/core/Mage/Adminhtml/Model/LayoutUpdate/Validator.php
+patching file app/code/core/Mage/Adminhtml/Model/System/Config/Backend/Filename.php
+patching file app/code/core/Mage/Api/Helper/Data.php
+patching file app/code/core/Mage/Api/Model/Server/Adapter/Soap.php
+patching file app/code/core/Mage/Api/Model/Wsdl/Config.php
+patching file app/code/core/Mage/Api/Model/Wsdl/Config/Base.php
+patching file app/code/core/Mage/Core/Helper/String.php
+patching file app/code/core/Mage/Core/Model/File/Validator/Image.php
+patching file app/code/core/Mage/Core/etc/config.xml
+patching file app/code/core/Mage/Core/etc/system.xml
+patching file app/code/core/Mage/Customer/Model/Customer.php
+patching file app/code/core/Mage/Eav/Model/Entity/Attribute/Backend/Serialized.php
+patching file app/code/core/Mage/Log/Helper/Data.php
+patching file app/code/core/Mage/Rule/Model/Abstract.php
+patching file app/code/core/Mage/Sales/Block/Adminhtml/Billing/Agreement/Grid.php
+patching file app/code/core/Zend/Form/Decorator/Form.php
+patching file app/design/adminhtml/default/default/template/backup/dialogs.phtml
+patching file app/design/adminhtml/default/default/template/sales/billing/agreement/view/tab/info.phtml
+patching file app/locale/en_US/Mage_Adminhtml.csv
+patching file app/locale/en_US/Mage_Customer.csv
+patching file js/mage/adminhtml/backup.js
+patching file lib/Varien/Filter/FormElementName.php
+
+
+2018-02-27 18:40:21 UTC | SUPEE-10570_CE_v1.7.0.2 | CE_1.7.0.2 | v1 | db062d5d697829711015bbb35d60dd91bf28b98f | Sat Feb 17 04:55:51 2018 +0200 | ce-1.7.0.2-dev
+patching file app/Mage.php
+patching file app/code/core/Mage/Admin/Helper/Data.php
+patching file app/code/core/Mage/Admin/Model/Block.php
+patching file app/code/core/Mage/Admin/Model/Resource/Block.php
+patching file app/code/core/Mage/Admin/Model/User.php
+patching file app/code/core/Mage/Adminhtml/Block/Catalog/Category/Edit/Form.php
+patching file app/code/core/Mage/Adminhtml/Block/Catalog/Product/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Newsletter/Template/Grid/Renderer/Sender.php
+patching file app/code/core/Mage/Adminhtml/Block/Sales/Order/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Sales/Order/View/Info.php
+patching file app/code/core/Mage/Adminhtml/Block/System/Store/Edit/Form.php
+patching file app/code/core/Mage/Adminhtml/Block/Tag/Assigned/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/Store.php
+patching file app/code/core/Mage/Adminhtml/Block/Widget/Tabs.php
+patching file app/code/core/Mage/Adminhtml/Model/Config/Data.php
+patching file app/code/core/Mage/Adminhtml/Model/System/Store.php
+patching file app/code/core/Mage/Adminhtml/controllers/Catalog/ProductController.php
+patching file app/code/core/Mage/Adminhtml/controllers/CustomerController.php
+patching file app/code/core/Mage/Adminhtml/controllers/System/BackupController.php
+patching file app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
+patching file app/code/core/Mage/Core/Model/Variable.php
+patching file app/code/core/Mage/Customer/Helper/Data.php
+patching file app/code/core/Mage/Customer/Model/Resource/Customer.php
+patching file app/code/core/Mage/Customer/controllers/AccountController.php
+patching file app/code/core/Mage/Customer/etc/config.xml
+patching file app/code/core/Mage/Customer/sql/customer_setup/upgrade-1.6.2.0.1.1.1-1.6.2.0.1.1.2.php
+patching file app/code/core/Mage/Downloadable/etc/config.xml
+patching file app/code/core/Mage/Downloadable/etc/system.xml
+patching file app/code/core/Mage/Downloadable/sql/downloadable_setup/upgrade-1.6.0.0.2.1.1-1.6.0.0.2.1.2.php
+patching file app/code/core/Mage/ImportExport/Model/Import.php
+patching file app/code/core/Mage/ImportExport/Model/Import/Entity/Product.php
+patching file app/code/core/Mage/Shipping/Model/Info.php
+patching file app/code/core/Mage/Widget/controllers/Adminhtml/Widget/InstanceController.php
+patching file app/design/adminhtml/default/default/template/catalog/product/attribute/set/main.phtml
+patching file app/design/adminhtml/default/default/template/customer/tab/view.phtml
+patching file app/design/adminhtml/default/default/template/customer/tab/view/sales.phtml
+patching file app/design/adminhtml/default/default/template/dashboard/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/product/composite/fieldset/downloadable.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/product/edit/downloadable/links.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/creditmemo/name.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/invoice/name.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/name.phtml
+patching file app/design/adminhtml/default/default/template/newsletter/preview/store.phtml
+patching file app/design/adminhtml/default/default/template/report/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/sales/order/view/info.phtml
+patching file app/design/adminhtml/default/default/template/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/store/switcher/enhanced.phtml
+patching file app/design/adminhtml/default/default/template/system/convert/profile/wizard.phtml
+patching file app/design/adminhtml/default/default/template/tax/rate/title.phtml
+patching file app/design/adminhtml/default/default/template/widget/form/renderer/fieldset.phtml
+patching file app/locale/en_US/Mage_Catalog.csv
+patching file app/locale/en_US/Mage_ImportExport.csv
+patching file lib/Zend/Mail/Transport/Sendmail.php
+
+
+2018-06-27 21:27:17 UTC | SUPEE-10570_CE_v1.7.0.2 | CE_1.7.0.2 | v1 | c065be10fea462017ef4e0ca75431a6879aef36f | Tue Feb 27 22:52:33 2018 +0200 | ce-1.7.0.2-dev | REVERTED
+patching file app/Mage.php
+patching file app/code/core/Mage/Admin/Helper/Data.php
+patching file app/code/core/Mage/Admin/Model/Block.php
+patching file app/code/core/Mage/Admin/Model/Resource/Block.php
+patching file app/code/core/Mage/Admin/Model/User.php
+patching file app/code/core/Mage/Adminhtml/Block/Catalog/Category/Edit/Form.php
+patching file app/code/core/Mage/Adminhtml/Block/Catalog/Product/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Sales/Order/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Sales/Order/View/Info.php
+patching file app/code/core/Mage/Adminhtml/Block/System/Store/Edit/Form.php
+patching file app/code/core/Mage/Adminhtml/Block/Tag/Assigned/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/Store.php
+patching file app/code/core/Mage/Adminhtml/Block/Widget/Tabs.php
+patching file app/code/core/Mage/Adminhtml/Model/Config/Data.php
+patching file app/code/core/Mage/Adminhtml/Model/System/Store.php
+patching file app/code/core/Mage/Adminhtml/controllers/Catalog/ProductController.php
+patching file app/code/core/Mage/Adminhtml/controllers/CustomerController.php
+patching file app/code/core/Mage/Adminhtml/controllers/System/BackupController.php
+patching file app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
+patching file app/code/core/Mage/Core/Model/Variable.php
+patching file app/code/core/Mage/Customer/Helper/Data.php
+patching file app/code/core/Mage/Customer/Model/Resource/Customer.php
+patching file app/code/core/Mage/Customer/controllers/AccountController.php
+patching file app/code/core/Mage/Customer/etc/config.xml
+patching file app/code/core/Mage/Downloadable/etc/config.xml
+patching file app/code/core/Mage/Downloadable/etc/system.xml
+patching file app/code/core/Mage/ImportExport/Model/Import.php
+patching file app/code/core/Mage/ImportExport/Model/Import/Entity/Product.php
+patching file app/code/core/Mage/Shipping/Model/Info.php
+patching file app/code/core/Mage/Widget/controllers/Adminhtml/Widget/InstanceController.php
+patching file app/design/adminhtml/default/default/template/catalog/product/attribute/set/main.phtml
+patching file app/design/adminhtml/default/default/template/customer/tab/view.phtml
+patching file app/design/adminhtml/default/default/template/customer/tab/view/sales.phtml
+patching file app/design/adminhtml/default/default/template/dashboard/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/product/composite/fieldset/downloadable.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/product/edit/downloadable/links.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/creditmemo/name.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/invoice/name.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/name.phtml
+patching file app/design/adminhtml/default/default/template/newsletter/preview/store.phtml
+patching file app/design/adminhtml/default/default/template/report/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/sales/order/view/info.phtml
+patching file app/design/adminhtml/default/default/template/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/store/switcher/enhanced.phtml
+patching file app/design/adminhtml/default/default/template/system/convert/profile/wizard.phtml
+patching file app/design/adminhtml/default/default/template/tax/rate/title.phtml
+patching file app/design/adminhtml/default/default/template/widget/form/renderer/fieldset.phtml
+patching file app/locale/en_US/Mage_Catalog.csv
+patching file app/locale/en_US/Mage_ImportExport.csv
+patching file lib/Zend/Mail/Transport/Sendmail.php
+
+
+2018-06-27 21:27:33 UTC | SUPEE-10570_CE_v1.7.0.2 | CE_1.7.0.2 | v1 | 0751c2137cab2b5c0651f8fc0d8f73312a134df1 | Fri Mar 16 13:52:32 2018 +0200 | ce-1.7.0.2-dev
+patching file app/Mage.php
+patching file app/code/core/Mage/Admin/Helper/Data.php
+patching file app/code/core/Mage/Admin/Model/Block.php
+patching file app/code/core/Mage/Admin/Model/Resource/Block.php
+patching file app/code/core/Mage/Admin/Model/User.php
+patching file app/code/core/Mage/Adminhtml/Block/Catalog/Category/Edit/Form.php
+patching file app/code/core/Mage/Adminhtml/Block/Catalog/Product/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Newsletter/Template/Grid/Renderer/Sender.php
+patching file app/code/core/Mage/Adminhtml/Block/Sales/Order/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Sales/Order/View/Info.php
+patching file app/code/core/Mage/Adminhtml/Block/System/Store/Edit/Form.php
+patching file app/code/core/Mage/Adminhtml/Block/Tag/Assigned/Grid.php
+patching file app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Renderer/Store.php
+patching file app/code/core/Mage/Adminhtml/Block/Widget/Tabs.php
+patching file app/code/core/Mage/Adminhtml/Model/Config/Data.php
+patching file app/code/core/Mage/Adminhtml/Model/System/Store.php
+patching file app/code/core/Mage/Adminhtml/controllers/Catalog/ProductController.php
+patching file app/code/core/Mage/Adminhtml/controllers/System/BackupController.php
+patching file app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
+patching file app/code/core/Mage/Core/Model/Variable.php
+patching file app/code/core/Mage/Customer/etc/config.xml
+patching file app/code/core/Mage/Customer/sql/customer_setup/upgrade-1.6.2.0.1.1.1-1.6.2.0.1.1.2.php
+patching file app/code/core/Mage/Downloadable/etc/config.xml
+patching file app/code/core/Mage/Downloadable/etc/system.xml
+patching file app/code/core/Mage/Downloadable/sql/downloadable_setup/upgrade-1.6.0.0.2.1.1-1.6.0.0.2.1.2.php
+patching file app/code/core/Mage/ImportExport/Model/Import.php
+patching file app/code/core/Mage/ImportExport/Model/Import/Entity/Product.php
+patching file app/code/core/Mage/Shipping/Model/Info.php
+patching file app/code/core/Mage/Widget/controllers/Adminhtml/Widget/InstanceController.php
+patching file app/design/adminhtml/default/default/template/catalog/product/attribute/set/main.phtml
+patching file app/design/adminhtml/default/default/template/customer/tab/view.phtml
+patching file app/design/adminhtml/default/default/template/customer/tab/view/sales.phtml
+patching file app/design/adminhtml/default/default/template/dashboard/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/product/composite/fieldset/downloadable.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/product/edit/downloadable/links.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/creditmemo/name.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/invoice/name.phtml
+patching file app/design/adminhtml/default/default/template/downloadable/sales/items/column/downloadable/name.phtml
+patching file app/design/adminhtml/default/default/template/newsletter/preview/store.phtml
+patching file app/design/adminhtml/default/default/template/report/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/sales/order/view/info.phtml
+patching file app/design/adminhtml/default/default/template/store/switcher.phtml
+patching file app/design/adminhtml/default/default/template/store/switcher/enhanced.phtml
+patching file app/design/adminhtml/default/default/template/system/convert/profile/wizard.phtml
+patching file app/design/adminhtml/default/default/template/tax/rate/title.phtml
+patching file app/design/adminhtml/default/default/template/widget/form/renderer/fieldset.phtml
+patching file app/locale/en_US/Mage_Catalog.csv
+patching file app/locale/en_US/Mage_ImportExport.csv
+patching file lib/Zend/Mail/Transport/Sendmail.php
+
+
+2018-06-27 21:27:36 UTC | SUPEE-10752_CE_v1.7.0.2 | CE_1.7.0.2 | v1 | 42d37fddc0704c3263581a2888b0a1e929a452a4 | Tue Jun 5 02:16:39 2018 +0300 | ce-1.7.0.2-dev
+patching file app/code/core/Mage/Admin/Model/User.php
+patching file app/code/core/Mage/Adminhtml/Block/Catalog/Product/Composite/Fieldset/Options.php
+patching file app/code/core/Mage/Adminhtml/Block/Catalog/Product/Edit/Tab/Options/Option.php
+patching file app/code/core/Mage/Adminhtml/Block/Widget/Grid/Column/Filter/Datetime.php
+patching file app/code/core/Mage/Adminhtml/Model/LayoutUpdate/Validator.php
+patching file app/code/core/Mage/Adminhtml/controllers/Catalog/CategoryController.php
+patching file app/code/core/Mage/Adminhtml/controllers/Catalog/ProductController.php
+patching file app/code/core/Mage/Adminhtml/controllers/Cms/Wysiwyg/ImagesController.php
+patching file app/code/core/Mage/Adminhtml/controllers/Cms/WysiwygController.php
+patching file app/code/core/Mage/Adminhtml/controllers/CustomerController.php
+patching file app/code/core/Mage/Adminhtml/controllers/System/StoreController.php
+patching file app/code/core/Mage/Catalog/Model/Product.php
+patching file app/code/core/Mage/Catalog/Model/Resource/Category/Tree.php
+patching file app/code/core/Mage/Checkout/Model/Api/Resource/Customer.php
+patching file app/code/core/Mage/Checkout/Model/Type/Onepage.php
+patching file app/code/core/Mage/Checkout/controllers/CartController.php
+patching file app/code/core/Mage/Core/Helper/Http.php
+patching file app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
+patching file app/code/core/Mage/Customer/Helper/Data.php
+patching file app/code/core/Mage/Customer/Model/Resource/Customer.php
+patching file app/code/core/Mage/Customer/controllers/AccountController.php
+patching file app/code/core/Mage/Log/Model/Visitor.php
+patching file app/code/core/Mage/Usa/Helper/Data.php
+patching file app/code/core/Mage/Usa/Model/Shipping/Carrier/Abstract/Backend/Abstract.php
+patching file app/code/core/Mage/Usa/Model/Shipping/Carrier/Ups/Backend/Freemethod.php
+patching file app/code/core/Mage/Usa/Model/Shipping/Carrier/Ups/Backend/OriginShipment.php
+patching file app/code/core/Mage/Usa/Model/Shipping/Carrier/Ups/Backend/Type.php
+patching file app/code/core/Mage/Usa/etc/system.xml
+patching file app/code/core/Zend/Filter/PregReplace.php
+patching file app/code/core/Zend/Validate/EmailAddress.php
+patching file app/design/adminhtml/default/default/template/bundle/product/edit/bundle/option.phtml
+Hunk #1 succeeded at 203 (offset -10 lines).
+patching file app/design/adminhtml/default/default/template/system/shipping/ups.phtml
+patching file app/design/frontend/base/default/template/downloadable/catalog/product/links.phtml
+patching file app/design/frontend/base/default/template/downloadable/checkout/cart/item/default.phtml
+patching file app/design/frontend/base/default/template/downloadable/checkout/onepage/review/item.phtml
+patching file app/design/frontend/base/default/template/downloadable/sales/order/items/renderer/downloadable.phtml
+patching file app/design/frontend/default/iphone/template/downloadable/checkout/cart/item/default.phtml
+patching file app/design/frontend/default/iphone/template/downloadable/checkout/onepage/review/item.phtml
+patching file app/locale/en_US/Mage_Catalog.csv
+patching file app/locale/en_US/Mage_Usa.csv
+patching file cron.php
+patching file js/tiny_mce/plugins/media/.htaccess
+patching file lib/Varien/Image/Adapter/Gd2.php
+
 

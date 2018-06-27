@@ -16,7 +16,7 @@ class Mage
             'major'     => '1',
             'minor'     => '7',
             'revision'  => '0',
-            'patch'     => '1',
+            'patch'     => '2',
             'stability' => '0',
             'number'    => '',
         );

@@ -422,19 +422,23 @@ EOF;
                     $shortName = array_shift($nameArray);
 
                     $patchVersion = (preg_match('/(v[0-9.]+)/', $release['file_name'], $matches)) ? rtrim($matches[1], '.') : 'v1';
+                    $patchReleaseVersion = (preg_match('/(v[0-9.]+)_(v[0-9.]+)/', $release['file_name'], $matches)) ? rtrim($matches[2], '.') : 'v1';
                     $patchName = (preg_match('/(SUPEE-[0-9]+)/', $release['file_name'], $matches))
                                     ? $matches[1]
                                     : (preg_match('/(SUPEE-[0-9]+)/', $release['name'], $matches))
                                         ? $matches[1]
                                         : '';
                     $patchCombinedName = sprintf('%s-%s', $patchName, $patchVersion);
+                    $patchReleaseCombinedName = sprintf('%s-%s', $patchName, $patchReleaseVersion);
 
                     if (!$all) {
                         $status = false;
                         if ($autoDetectedVersion == $downloadRelease) {
+                            var_dump($release['file_name'], $patchName, $patchCombinedName, $patchReleaseCombinedName);
                             if (in_array($release['file_name'], $appliedPatches) ||
                                 in_array($patchName, $appliedPatches) ||
-                                in_array($patchCombinedName, $appliedPatches)) {
+                                in_array($patchCombinedName, $appliedPatches) ||
+                                in_array($patchReleaseCombinedName, $appliedPatches)) {
                                 $status = $this->colors->getColoredString(str_pad('Installed', 12), 'green');
                             } else {
                                 $status = $this->colors->getColoredString(str_pad('Missing', 12), 'red');
