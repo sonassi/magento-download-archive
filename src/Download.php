@@ -434,7 +434,6 @@ EOF;
                     if (!$all) {
                         $status = false;
                         if ($autoDetectedVersion == $downloadRelease) {
-                            var_dump($release['file_name'], $patchName, $patchCombinedName, $patchReleaseCombinedName);
                             if (in_array($release['file_name'], $appliedPatches) ||
                                 in_array($patchName, $appliedPatches) ||
                                 in_array($patchCombinedName, $appliedPatches) ||
