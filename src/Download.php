@@ -13,7 +13,7 @@ class Downloader
     private $downloadId = 0;
     private $downloadDir = 'downloads';
     private $log = [];
-    private $longopts = [ 'id::', 'token::', 'help' ];
+    private $longopts = [ 'id::', 'token::', 'help', 'filter::' ];
 
     public function __construct()
     {
@@ -31,7 +31,7 @@ class Downloader
 
         $this->config = @parse_ini_file('.config.ini');
 
-        foreach (['id', 'token'] as $value) {
+        foreach (['id', 'token', 'filter'] as $value) {
             if (!empty($options[$value]))
                 $this->config[strtoupper($value)] = $options[$value];
         }
@@ -71,6 +71,7 @@ Options:
 
     --id        Magento download ID
     --token     Magento download token
+    --filter    Filename filter (regex supported)
 
 EOF;
         exit(1);
@@ -261,6 +262,8 @@ EOF;
                 $downloadFile = sprintf('%s/%s/%s', $this->cwd, $this->downloadDir, $downloadFilename);
                 if ($all && preg_match('/(Samples|sample_data)/', $downloadFile)) {
                     $this->log[] = sprintf("Downloads including sample data skipped when downloading all\r\n");
+                } else if (!empty($this->config['FILTER']) && !preg_match('#'.$this->config['FILTER'].'#i', $downloadFile)) {
+                    $this->log[] = sprintf("Filename does not match filter, skipped\r\n");
                 } else if ($destinationFile = $this->download($downloadFilename, $downloadFile)) {
                     $this->log[] = sprintf("File downloaded to %s\r\n", $destinationFile);
                 } else {

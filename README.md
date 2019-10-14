@@ -2,6 +2,16 @@
 
 Quickly download Magento patches for any Magento version or full Magento source, using a backup download source for high performance downloads.
 
+## Options
+
+~~~~
+Options:
+
+    --id=        Magento download ID
+    --token=     Magento download token
+    --filter=    Filename filter (regex supported)
+~~~~
+
 ## Usage
 
 Change to to your Magento document root and grab the pre-built phar,
