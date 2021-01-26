@@ -5,9 +5,7 @@ class Downloader
 
     private $downloadData;
     private $downloadUrlFormat = 'https://%s:%s@www.magentocommerce.com/products/downloads';
-    private $githubUrlFormat = 'https://raw.githubusercontent.com';
-    private $githubDownloadsRepo = 'sonassi/magento-downloads/master';
-    private $githubSelfRepo = 'sonassi/magento-download-archive/master';
+    private $githubSelfRepo = 'sonassi/magento-download-archive/master ';
     private $cacheFile;
     private $config;
     private $downloadId = 0;
@@ -88,11 +86,6 @@ EOF;
         if (!$destinationFile)
             $destinationFile = sprintf('%s/%s/%s', $this->cwd, $this->downloadDir, $filename);
 
-        // Try downloading from the Sonassi github repo for better performance
-        $githubUrl = sprintf('%s/%s/%s', $this->githubUrlFormat, $this->githubDownloadsRepo, $filename);
-        if ($this->remoteFileExists($githubUrl))
-            $sourceFile = $githubUrl;
-
         $filesize = $this->getRemoteFileSize($sourceFile);
         $filesizeMb = round($filesize / 1024 / 1024, 2);
 
@@ -155,7 +148,7 @@ EOF;
         $data = curl_exec($ch);
         curl_close($ch);
 
-        if (preg_match('/Content-Length: (\d+)/', $data, $matches))
+        if (preg_match('/Content-Length: (\d+)/i', $data, $matches))
             $contentLength = (int)$matches[1];
 
         return $contentLength;
